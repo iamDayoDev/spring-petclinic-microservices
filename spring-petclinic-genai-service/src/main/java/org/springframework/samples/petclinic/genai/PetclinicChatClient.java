@@ -1,7 +1,5 @@
 package org.springframework.samples.petclinic.genai;
 
-import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.DEFAULT_CHAT_MEMORY_CONVERSATION_ID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -30,8 +28,9 @@ public class PetclinicChatClient {
 	// checkout the interfaces in the core Spring AI package.
 	private final ChatClient chatClient;
 
-	public PetclinicChatClient(ChatClient.Builder builder, ChatMemory chatMemory) {
-		// @formatter:off
+	public PetclinicChatClient(ChatClient.Builder builder, ChatMemory chatMemory,
+                               PetclinicTools petclinicTools) {
+        // @formatter:off
 		this.chatClient = builder
 				.defaultSystem("""
                           You are a friendly AI assistant designed to help with the management of a veterinarian pet clinic called Spring Petclinic.
@@ -46,10 +45,12 @@ public class PetclinicChatClient {
                           """)
 				.defaultAdvisors(
 						// Chat memory helps us keep context when using the chatbot for up to 10 previous messages.
-						new MessageChatMemoryAdvisor(chatMemory, DEFAULT_CHAT_MEMORY_CONVERSATION_ID, 10), // CHAT MEMORY
+                        MessageChatMemoryAdvisor.builder(chatMemory)
+                            .order(10)
+                            .build(),
 						new SimpleLoggerAdvisor()
 						)
-                .defaultFunctions("listOwners", "addOwnerToPetclinic", "addPetToOwner", "listVets")
+                .defaultTools(petclinicTools)
 				.build();
   }
 
@@ -58,15 +59,11 @@ public class PetclinicChatClient {
 	  try {
 		  //All chatbot messages go through this endpoint
 		  //and are passed to the LLM
-		  return
-		  this.chatClient
-		  .prompt()
-	      .user(
-	          u ->
-	              u.text(query)
-	              )
-	      .call()
-	      .content();
+		  return this.chatClient
+              .prompt()
+              .user(query)
+              .call()
+              .content();
 	  } catch (Exception exception) {
           LOG.error("Error processing chat message", exception);
  	      return "Chat is currently unavailable. Please try again later.";

@@ -11,25 +11,29 @@
 	<parent>
 		<groupId>org.springframework.samples</groupId>
 		<artifactId>spring-petclinic-microservices</artifactId>
-        <version>3.4.1</version>
+        <version>4.0.1</version>
 	</parent>
 
     <properties>
         <docker.image.exposed.port>8081</docker.image.exposed.port>
         <docker.image.dockerfile.dir>${basedir}/../docker</docker.image.dockerfile.dir>
-        <spring-ai.version>1.0.0-M4</spring-ai.version>
+        <spring-ai.version>2.0.0-M1</spring-ai.version>
     </properties>
 
 	<dependencies>
         <!-- Spring Boot -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
-			<!-- artifactId>spring-ai-azure-openai-spring-boot-starter</artifactId-->
+            <artifactId>spring-ai-starter-model-openai</artifactId>
+			<!-- artifactId>spring-ai-starter-model-azure-openai</artifactId-->
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-vector-store</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -69,7 +73,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
+            <artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
         </dependency>
 
         <!-- Third parties-->
@@ -126,7 +130,6 @@
         <dependency>
             <groupId>net.ttddyy.observation</groupId>
             <artifactId>datasource-micrometer-spring-boot</artifactId>
-            <version>1.0.2</version>
         </dependency>
 
         <!-- Testing -->

@@ -11,7 +11,7 @@ spring:
     chat:
       client:
         enabled: true
-    # These apply when using spring-ai-azure-openai-spring-boot-starter
+    # These apply when using spring-ai-starter-model-azure-openai
     azure:
       openai:
         api-key: ${AZURE_OPENAI_KEY}
@@ -20,7 +20,7 @@ spring:
           options:
             temperature: 0.7
             deployment-name: gpt-4o
-    # These apply when using spring-ai-openai-spring-boot-starter
+    # These apply when using spring-ai-starter-model-openai
     openai:
       api-key: ${OPENAI_API_KEY:demo}
       chat:

@@ -1,7 +1,5 @@
 package org.springframework.samples.petclinic.genai;
 
-import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -19,15 +17,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class AIBeanConfiguration {
 
 	@Bean
-	public ChatMemory chatMemory() {
-		return new InMemoryChatMemory();
+	VectorStore vectorStore(EmbeddingModel embeddingModel) {
+		return SimpleVectorStore.builder(embeddingModel).build();
 	}
 
-	@Bean
-	VectorStore vectorStore(EmbeddingModel embeddingModel) {
-		return new SimpleVectorStore(embeddingModel);
-	}
-	
     @Bean
     @LoadBalanced
     public WebClient.Builder loadBalancedWebClientBuilder() {

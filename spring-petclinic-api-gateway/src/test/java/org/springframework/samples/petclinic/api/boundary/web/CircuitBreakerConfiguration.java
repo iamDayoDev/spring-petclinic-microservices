@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.api.boundary.web;
 
+import io.github.resilience4j.bulkhead.BulkheadRegistry;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.timelimiter.TimeLimiterRegistry;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigurationProperties;
@@ -18,6 +19,11 @@ public class CircuitBreakerConfiguration {
     @Bean
     public TimeLimiterRegistry timeLimiterRegistry() {
         return TimeLimiterRegistry.ofDefaults();
+    }
+
+    @Bean
+    public BulkheadRegistry bulkheadRegistry() {
+        return BulkheadRegistry.ofDefaults();
     }
 
     @Bean

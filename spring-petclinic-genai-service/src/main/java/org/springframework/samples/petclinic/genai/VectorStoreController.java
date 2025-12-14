@@ -1,14 +1,13 @@
 package org.springframework.samples.petclinic.genai;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.ai.vectorstore.SimpleVectorStore;
+import org.springframework.ai.vectorstore.VectorStore;
+import tools.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.document.DocumentReader;
 import org.springframework.ai.reader.JsonReader;
-import org.springframework.ai.vectorstore.SimpleVectorStore;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.ParameterizedTypeReference;
@@ -18,6 +17,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.samples.petclinic.genai.dto.Vet;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import tools.jackson.core.JacksonException;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,11 +80,11 @@ public class VectorStoreController {
 		// add the documents to the vector store
 		this.vectorStore.add(documents);
 
-		if (vectorStore instanceof SimpleVectorStore) {
+		if (vectorStore instanceof SimpleVectorStore store) {
             // java:S5443 Sonar rule: Using publicly writable directories is security-sensitive
             FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------"));
             File file = Files.createTempFile("vectorstore", ".json", attr).toFile();
-			((SimpleVectorStore) this.vectorStore).save(file);
+			store.save(file);
 			logger.info("vector store contents written to {}", file.getAbsolutePath());
 		}
 
@@ -103,7 +103,7 @@ public class VectorStoreController {
 			// Create a ByteArrayResource from the byte array
 			return new ByteArrayResource(jsonBytes);
 		}
-		catch (JsonProcessingException e) {
+		catch (JacksonException e) {
             logger.error("Error processing JSON in the convertListToJsonResource function", e);
 			return null;
 		}

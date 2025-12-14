@@ -113,8 +113,8 @@ Spring Petclinic integrates a Chatbot that allows you to interact with the appli
 This `spring-petlinic-genai-service` microservice currently supports **OpenAI** (default) or **Azure's OpenAI** as the LLM provider.
 In order to start the microservice, perform the following steps:
 
-1. Decide which provider you want to use. By default, the `spring-ai-openai-spring-boot-starter` dependency is enabled. 
-   You can change it to `spring-ai-azure-openai-spring-boot-starter`in the `pom.xml`.
+1. Decide which provider you want to use. By default, the `spring-ai-starter-model-openai` dependency is enabled. 
+   You can change it to `spring-ai-starter-model-azure-openai`in the `pom.xml`.
 2. Create an OpenAI API key or a Azure OpenAI resource in your Azure Portal.
    Refer to the [OpenAI's quickstart](https://platform.openai.com/docs/quickstart) or [Azure's documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/) for further information on how to obtain these.
    You only need to populate the provider you're using - either openai, or azure-openai.

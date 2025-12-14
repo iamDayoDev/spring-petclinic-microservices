@@ -1,7 +1,7 @@
 package org.springframework.samples.petclinic.api.application;
 
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
+import mockwebserver3.MockResponse;
+import mockwebserver3.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -33,14 +32,12 @@ class VisitsServiceClientIntegrationTest {
 
     @AfterEach
     void shutdown() throws IOException {
-        this.server.shutdown();
+        this.server.close();
     }
 
     @Test
     void getVisitsForPets_withAvailableVisitsService() {
-        prepareResponse(response -> response
-            .setHeader("Content-Type", "application/json")
-            .setBody("{\"items\":[{\"id\":5,\"date\":\"2018-11-15\",\"description\":\"test visit\",\"petId\":1}]}"));
+        prepareResponse();
 
         Mono<Visits> visits = visitsServiceClient.getVisitsForPets(Collections.singletonList(1));
 
@@ -55,9 +52,11 @@ class VisitsServiceClientIntegrationTest {
         assertEquals(description, visits.items().get(0).description());
     }
 
-    private void prepareResponse(Consumer<MockResponse> consumer) {
-        MockResponse response = new MockResponse();
-        consumer.accept(response);
+    private void prepareResponse() {
+        MockResponse response = new MockResponse.Builder()
+            .addHeader("Content-Type", "application/json")
+            .body("{\"items\":[{\"id\":5,\"date\":\"2018-11-15\",\"description\":\"test visit\",\"petId\":1}]}")
+            .build();
         this.server.enqueue(response);
     }
 

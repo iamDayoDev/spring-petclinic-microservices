@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-server
+  template:
+    metadata:
+      labels:
+        app: admin-server
+    spec:
+      containers:
+      - name: admin-server
+        image: 139561979448.dkr.ecr.us-east-1.amazonaws.com/petclinic/admin-server:latest
+        ports:
+        - containerPort: 9090
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 9090
+          initialDelaySeconds: 30
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-server
+spec:
+  selector:
+    app: admin-server
+  ports:
+  - port: 9090
+    targetPort: 9090

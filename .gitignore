@@ -1,23 +1,16 @@
-# Maven
-target/
-!.mvn/wrapper/maven-wrapper.jar
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
 
-# Jenv
-.java-version
+# K8s temp files
+k8s/
 
-# Eclipse
-.settings/
-.classpath
-.project
+# OS
+.DS_Store
+Thumbs.db
 
-# IntelliJ IDEA
-.idea
-*.iml
-
-# Visual Studio Code
-.factorypath
-
-# Branch switching
-generated/
-
-**/.DS_Store
+# IDE
+.vscode/
+.idea/

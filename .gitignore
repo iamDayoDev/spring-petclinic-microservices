@@ -14,3 +14,16 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Java build artifacts
+target/
+*.jar
+*.jar.original
+*.war
+
+# Terraform (belongs in petclinic-platform)
+terraform/
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl

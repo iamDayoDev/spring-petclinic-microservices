@@ -67,9 +67,9 @@ jobs:
       # Step 7: Clone platform repo
       - name: Clone petclinic-platform
         env:
-          PLATFORM_REPO_PAT: ${{ secrets.PLATFORM_REPO_PAT }}
+          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
         run: |
-          git clone https://x-access-token:${PLATFORM_REPO_PAT}@github.com/etaoko333/petclinic-platform.git \
+          git clone https://x-access-token:${GH_PERSONAL_ACCESS_TOKEN}@github.com/etaoko333/petclinic-platform.git \
             /tmp/petclinic-platform
 
       # Step 8: Update image tag in values.yaml

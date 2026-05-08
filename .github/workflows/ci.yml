@@ -13,11 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ── Checkout ────────────────────────────────────────────────────────────
       - name: Checkout source
         uses: actions/checkout@v4
 
-      # ── Java ────────────────────────────────────────────────────────────────
       - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
@@ -25,7 +23,6 @@ jobs:
           distribution: temurin
           cache: maven
 
-      # ── AWS credentials ─────────────────────────────────────────────────────
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -33,16 +30,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region:            ${{ secrets.AWS_REGION }}
 
-      # ── ECR login ───────────────────────────────────────────────────────────
       - name: Login to Amazon ECR
-        id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
 
-      # ── Build ───────────────────────────────────────────────────────────────
       - name: Build Docker images with Maven
         run: ./mvnw clean install -P buildDocker -Dmaven.test.skip=true
 
-      # ── Tag & push ──────────────────────────────────────────────────────────
       - name: Tag and push images to ECR
         env:
           GIT_SHA: ${{ github.sha }}
@@ -55,21 +48,21 @@ jobs:
             vets-service
             visits-service
             admin-server
+            genai-service
           )
           for SERVICE in "${SERVICES[@]}"; do
-            LOCAL_IMAGE="springcommunity/${SERVICE}:latest"
+            LOCAL_IMAGE="springcommunity/spring-petclinic-${SERVICE}:latest"
             REMOTE_IMAGE="${ECR_REGISTRY}/${SERVICE}:${GIT_SHA}"
             echo "Pushing ${REMOTE_IMAGE}"
             docker tag  "${LOCAL_IMAGE}" "${REMOTE_IMAGE}"
             docker push "${REMOTE_IMAGE}"
           done
 
-      # ── Update platform repo ────────────────────────────────────────────────
       - name: Clone petclinic-platform
         env:
           PLATFORM_REPO_PAT: ${{ secrets.PLATFORM_REPO_PAT }}
         run: |
-          git clone https://x-access-token:${PLATFORM_REPO_PAT}@github.com/eta-oko/petclinic-platform.git \
+          git clone https://x-access-token:${PLATFORM_REPO_PAT}@github.com/etaoko333/petclinic-platform.git \
             /tmp/petclinic-platform
 
       - name: Update image tag in values.yaml
@@ -91,4 +84,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add helm/petclinic/values.yaml
           git commit -m "chore: deploy ${GIT_SHA::7} [skip ci]"
-          git push https://x-access-token:${PLATFORM_REPO_PAT}@github.com/eta-oko/petclinic-platform.git main
+          git push https://x-access-token:${PLATFORM_REPO_PAT}@github.com/etaoko333/petclinic-platform.git main

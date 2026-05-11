@@ -1,12 +1,18 @@
-name: CI/CD - Build and Deploy to EKS
+name: Build and Push to ECR
 
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: read
+  id-token: write
+
 env:
   ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+  AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
 
 jobs:
   build-and-deploy:
@@ -27,11 +33,10 @@ jobs:
 
       # Step 3: Connect to AWS using secrets
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
-          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region:            ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
 
       # Step 4: Login to ECR so we can push images
       - name: Login to Amazon ECR
@@ -67,7 +72,7 @@ jobs:
       # Step 7: Clone platform repo
       - name: Clone petclinic-platform
         env:
-          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           git clone https://x-access-token:${GH_PERSONAL_ACCESS_TOKEN}@github.com/etaoko333/petclinic-platform.git \
             /tmp/petclinic-platform
@@ -86,7 +91,7 @@ jobs:
       - name: Commit and push tag update
         env:
           GIT_SHA: ${{ github.sha }}
-          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           cd /tmp/petclinic-platform
           git config user.name  "github-actions[bot]"

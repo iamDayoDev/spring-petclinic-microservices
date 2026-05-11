@@ -74,7 +74,7 @@ jobs:
         env:
           GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          git clone https://x-access-token:${GH_PERSONAL_ACCESS_TOKEN}@github.com/etaoko333/petclinic-platform.git \
+          git clone https://x-access-token:${GH_PERSONAL_ACCESS_TOKEN}@github.com/etaoko333/petclinic-microservices.git \
             /tmp/petclinic-platform
 
       # Step 8: Update image tag in values.yaml
@@ -98,4 +98,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add helm/petclinic/values.yaml
           git commit -m "chore: deploy ${GIT_SHA::7} [skip ci]"
-          git push https://x-access-token:${GH_PERSONAL_ACCESS_TOKEN}@github.com/etaoko333/petclinic-platform.git main
+          git push https://x-access-token:${GH_PERSONAL_ACCESS_TOKEN}@github.com/etaoko333/petclinic-microservices.git main

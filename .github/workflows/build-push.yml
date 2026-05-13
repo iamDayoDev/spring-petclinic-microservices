@@ -1,4 +1,4 @@
-# This workflow detects changes to services, builds and pushes Docker images for changed services, and notifies the platform repository of new images.
+# Trigger to deploy
 name: Build and Push Docker Images
 
 on:

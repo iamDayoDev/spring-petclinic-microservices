@@ -11,15 +11,6 @@ on:
         description: "7-character commit SHA used as the Docker image tag"
         required: true
         type: string
-      aws-region:
-        description: "AWS region where ECR repositories are hosted"
-        required: false
-        type: string
-        default: "eu-central-1"
-      aws-account-id:
-        description: "AWS account ID for constructing the ECR registry URL"
-        required: true
-        type: string
    
 
 permissions:
@@ -34,6 +25,8 @@ jobs:
     env:
       MAVEN_MODULE: spring-petclinic-${{ inputs.service }}
       SOURCE_IMAGE: springcommunity/spring-petclinic-${{ inputs.service }}
+      AWS_REGION: ${{ vars.AWS_REGION || secrets.AWS_REGION || 'us-east-1' }}
+      AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID || secrets.AWS_ACCOUNT_ID }}
 
     steps:
       - name: Checkout application repo
@@ -53,7 +46,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ inputs.aws-region }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
@@ -62,7 +55,7 @@ jobs:
         id: target-image
         shell: bash
         run: |
-          registry="${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com"
+          registry="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
           TARGET_IMAGE="${registry}/petclinic-dev-${{ inputs.service }}:${{ inputs.sha }}"
 
           echo "registry=${registry}" >> "$GITHUB_OUTPUT"

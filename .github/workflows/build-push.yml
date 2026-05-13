@@ -129,5 +129,6 @@ jobs:
           client-payload: |
             {
               "sha": "${{ needs.detect-service-changes.outputs.sha }}",
-              "services": "${{ needs.detect-service-changes.outputs.services }}"
+              "services": "${{ needs.detect-service-changes.outputs.services }}",
+              "source_repository": "${{ github.repository }}"
             }

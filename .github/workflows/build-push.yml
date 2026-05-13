@@ -108,8 +108,6 @@ jobs:
     with:
       service: ${{ matrix.service }}
       sha: ${{ needs.detect-service-changes.outputs.sha }}
-      aws-region:     ${{ vars.AWS_REGION || 'us-east-1' }}
-      aws-account-id: ${{ vars.AWS_ACCOUNT_ID }}
     secrets: inherit
 
   notify:

@@ -3,7 +3,7 @@ name: Build and Push Docker Images
 
 on:
   push:
-    branches: [main, ft/app-build]
+    branches: [main]
 
 permissions:
   id-token: write

@@ -1,4 +1,6 @@
 Trigger discovery-server
+<<<<<<< HEAD
 trigger one
-trigger two
-trigger 3
+=======
+trigger 1
+>>>>>>> 098fe1f (chore: triggerd all seervices)

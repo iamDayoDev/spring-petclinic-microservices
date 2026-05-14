@@ -1,6 +1,8 @@
 Trigger api-gateway
+<<<<<<< HEAD
 trigger 
 triger two
 trigger three
-trigger four
-trigger 5
+=======
+trigger 1
+>>>>>>> 098fe1f (chore: triggerd all seervices)

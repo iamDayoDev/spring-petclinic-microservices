@@ -3,4 +3,8 @@ Trigger discovery-server
 trigger one
 =======
 trigger 1
+<<<<<<< HEAD
 >>>>>>> 098fe1f (chore: triggerd all seervices)
+=======
+trigger 2
+>>>>>>> bc825ec (chore: triggerd all service the second time)

@@ -1,0 +1,8 @@
+# Trivy CVE allowlist for Spring Petclinic Microservices
+#
+# Add CVE IDs here, one per line, to suppress known or accepted
+# vulnerabilities from CI scan output.
+#
+# Example:
+#   # Unfixed in the current base image. Review again after the next base image update.
+#   CVE-2023-XXXXX

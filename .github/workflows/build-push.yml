@@ -3,10 +3,7 @@ name: Build and Push Docker Images
 
 on:
   push:
-    branches: [main]
-
-  pull_request:
-    branches: [main]
+    branches: [main, ft/app-pipeline]
 
 
 permissions:

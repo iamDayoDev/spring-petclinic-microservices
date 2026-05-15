@@ -1,4 +1,4 @@
-# Trigger to deploy
+# Trigger to deploys
 name: Build and Push Docker Images
 
 on:
